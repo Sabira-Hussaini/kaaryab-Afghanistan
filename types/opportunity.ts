@@ -10,4 +10,5 @@ export interface Opportunity {
   requirements: string[];
   applyLink: string;
   tags: string[];
+  featured?: boolean;
 }

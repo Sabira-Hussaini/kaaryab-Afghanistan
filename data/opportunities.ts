@@ -15,10 +15,11 @@ export const opportunities: Opportunity[] = [
       "HTML",
       "CSS",
       "JavaScript",
-      "React"
+      "React",
     ],
     applyLink: "https://example.com/apply",
-    tags: ["React", "Frontend", "Internship"]
+    tags: ["React", "Frontend", "Internship"],
+    featured: true,
   },
 
   {
@@ -33,10 +34,11 @@ export const opportunities: Opportunity[] = [
       "Scholarship program for women interested in technology.",
     requirements: [
       "English",
-      "Motivation Letter"
+      "Motivation Letter",
     ],
     applyLink: "https://example.com/scholarship",
-    tags: ["Women", "Scholarship"]
+    tags: ["Women", "Scholarship"],
+    featured: true,
   },
 
   {
@@ -52,10 +54,11 @@ export const opportunities: Opportunity[] = [
     requirements: [
       "Node.js",
       "MongoDB",
-      "Git"
+      "Git",
     ],
     applyLink: "https://example.com/job",
-    tags: ["Node", "Backend"]
+    tags: ["Node", "Backend"],
+    featured: true,
   },
 
   {
@@ -70,10 +73,11 @@ export const opportunities: Opportunity[] = [
       "Free digital marketing training program.",
     requirements: [
       "Laptop",
-      "Basic Computer Skills"
+      "Basic Computer Skills",
     ],
     applyLink: "https://example.com/training",
-    tags: ["Marketing"]
+    tags: ["Marketing"],
+    featured: false,
   },
 
   {
@@ -88,10 +92,11 @@ export const opportunities: Opportunity[] = [
       "Design websites and mobile applications remotely.",
     requirements: [
       "Figma",
-      "UI Design"
+      "UI Design",
     ],
     applyLink: "https://example.com/uiux",
-    tags: ["Figma", "Design"]
+    tags: ["Figma", "Design"],
+    featured: false,
   },
 
   {
@@ -106,9 +111,10 @@ export const opportunities: Opportunity[] = [
       "Volunteer opportunity for teaching English.",
     requirements: [
       "English",
-      "Teaching"
+      "Teaching",
     ],
     applyLink: "https://example.com/volunteer",
-    tags: ["Volunteer"]
-  }
+    tags: ["Volunteer"],
+    featured: false,
+  },
 ];
