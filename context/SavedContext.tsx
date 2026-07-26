@@ -1,6 +1,11 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 type SavedContextType = {
   savedIds: string[];
@@ -8,7 +13,10 @@ type SavedContextType = {
   isSaved: (id: string) => boolean;
 };
 
-const SavedContext = createContext<SavedContextType | undefined>(undefined);
+const SavedContext =
+  createContext<SavedContextType | undefined>(undefined);
+
+const SAVED_KEY = "saved-opportunities";
 
 export function SavedProvider({
   children,
@@ -17,30 +25,56 @@ export function SavedProvider({
 }) {
   const [savedIds, setSavedIds] = useState<string[]>([]);
 
-  useEffect(() => {
-    const saved = localStorage.getItem("saved-opportunities");
 
-    if (saved) {
-      setSavedIds(JSON.parse(saved));
+  // Load saved opportunities
+  useEffect(() => {
+    try {
+      const saved =
+        localStorage.getItem(SAVED_KEY);
+
+      if (saved) {
+        setSavedIds(JSON.parse(saved));
+      }
+    } catch (error) {
+      console.error(
+        "Failed to load saved opportunities:",
+        error
+      );
     }
   }, []);
 
+
+  // Save opportunities whenever state changes
   useEffect(() => {
-    localStorage.setItem(
-      "saved-opportunities",
-      JSON.stringify(savedIds)
-    );
+    try {
+      localStorage.setItem(
+        SAVED_KEY,
+        JSON.stringify(savedIds)
+      );
+    } catch (error) {
+      console.error(
+        "Failed to save saved opportunities:",
+        error
+      );
+    }
   }, [savedIds]);
 
+
   const toggleSaved = (id: string) => {
-    setSavedIds((prev) =>
-      prev.includes(id)
-        ? prev.filter((item) => item !== id)
-        : [...prev, id]
+    setSavedIds((previous) =>
+      previous.includes(id)
+        ? previous.filter(
+            (item) => item !== id
+          )
+        : [...previous, id]
     );
   };
 
-  const isSaved = (id: string) => savedIds.includes(id);
+
+  const isSaved = (id: string) => {
+    return savedIds.includes(id);
+  };
+
 
   return (
     <SavedContext.Provider
@@ -55,11 +89,14 @@ export function SavedProvider({
   );
 }
 
+
 export function useSaved() {
   const context = useContext(SavedContext);
 
   if (!context) {
-    throw new Error("useSaved must be used inside SavedProvider");
+    throw new Error(
+      "useSaved must be used inside SavedProvider"
+    );
   }
 
   return context;

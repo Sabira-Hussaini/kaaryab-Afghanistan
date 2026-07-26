@@ -8,9 +8,12 @@ const categories = {
     "Job",
     "Internship",
     "Scholarship",
-    "Remote",
+    "Remote Work",
     "Training",
+    "Volunteer",
+    "Online Course",
   ],
+
   fa: [
     "همه",
     "وظیفه",
@@ -18,6 +21,8 @@ const categories = {
     "بورسیه",
     "دورکاری",
     "آموزش",
+    "داوطلبی",
+    "دوره آنلاین",
   ],
 };
 
@@ -32,32 +37,46 @@ export default function CategoryFilter({
 }: Props) {
   const { language } = useLanguage();
 
-  // English values used for filtering
   const values = categories.en;
-
-  // Text displayed to the user
   const labels = categories[language];
 
   return (
-    <div
+    <section
       dir={language === "fa" ? "rtl" : "ltr"}
-      className={`mb-8 flex flex-wrap gap-3 ${
-        language === "fa" ? "justify-end" : ""
-      }`}
+      className="mb-8"
     >
-      {values.map((value, index) => (
-        <button
-          key={value}
-          onClick={() => setSelected(value)}
-          className={`rounded-full px-5 py-2 transition ${
-            selected === value
-              ? "bg-blue-600 text-white"
-              : "bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700"
-          }`}
-        >
-          {labels[index]}
-        </button>
-      ))}
-    </div>
+      <h2 className="sr-only">
+        {language === "fa"
+          ? "فیلتر دسته‌بندی"
+          : "Category Filter"}
+      </h2>
+
+      <div
+        className={`flex flex-wrap gap-3 ${
+          language === "fa"
+            ? "justify-end"
+            : "justify-start"
+        }`}
+      >
+        {values.map((value, index) => {
+          const active = selected === value;
+
+          return (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setSelected(value)}
+              className={`rounded-full border px-5 py-2.5 text-sm font-medium transition ${
+                active
+                  ? "border-blue-600 bg-blue-600 text-white"
+                  : "border-slate-200 bg-white text-slate-700 hover:bg-blue-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+              }`}
+            >
+              {labels[index]}
+            </button>
+          );
+        })}
+      </div>
+    </section>
   );
 }

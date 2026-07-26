@@ -5,42 +5,52 @@ const STORAGE_KEY = "kaaryab-opportunities";
 export function getStoredOpportunities(): Opportunity[] {
   if (typeof window === "undefined") return [];
 
-  const stored = localStorage.getItem(STORAGE_KEY);
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
 
-  if (!stored) return [];
+    if (!stored) return [];
 
-  return JSON.parse(stored);
+    return JSON.parse(stored) as Opportunity[];
+  } catch (error) {
+    console.error("Failed to read opportunities:", error);
+    return [];
+  }
 }
 
 export function saveStoredOpportunities(
   opportunities: Opportunity[]
-) {
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify(opportunities)
-  );
-}
+): void {
+  if (typeof window === "undefined") return;
 
-export function addOpportunity(opportunity: Opportunity) {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify(opportunities)
+    );
+  } catch (error) {
+    console.error(
+      "Failed to save opportunities:",
+      error
+    );
+  }
+}
+export function addOpportunity(
+  opportunity: Opportunity
+): void {
   const existing = getStoredOpportunities();
 
-  existing.push(opportunity);
-
-  saveStoredOpportunities(existing);
-}
-
-export function deleteOpportunity(id: string) {
-  const opportunities = getStoredOpportunities();
-
-  const updated = opportunities.filter(
-    (item) => item.id !== id
+  const filtered = existing.filter(
+    (item) => item.id !== opportunity.id
   );
 
-  saveStoredOpportunities(updated);
+  saveStoredOpportunities([
+    ...filtered,
+    opportunity,
+  ]);
 }
-
-
-export function updateOpportunity(updatedOpportunity: Opportunity) {
+export function updateOpportunity(
+  updatedOpportunity: Opportunity
+): void {
   const existing = getStoredOpportunities();
 
   const updated = existing.map((item) =>
@@ -50,4 +60,48 @@ export function updateOpportunity(updatedOpportunity: Opportunity) {
   );
 
   saveStoredOpportunities(updated);
+}
+
+export function deleteOpportunity(id: string): void {
+  const existing = getStoredOpportunities();
+
+  const updated = existing.filter(
+    (item) => item.id !== id
+  );
+
+  saveStoredOpportunities(updated);
+}
+
+export function getOpportunityById(
+  id: string
+): Opportunity | null {
+  const opportunity =
+    getStoredOpportunities().find(
+      (item) => item.id === id
+    );
+
+  return opportunity ?? null;
+}
+
+export function clearOpportunities(): void {
+  if (typeof window === "undefined") return;
+
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+export function getAllOpportunities(
+  demoData: Opportunity[]
+): Opportunity[] {
+  const stored = getStoredOpportunities();
+
+  const ids = new Set(
+    demoData.map((item) => item.id)
+  );
+
+  return [
+    ...demoData,
+    ...stored.filter(
+      (item) => !ids.has(item.id)
+    ),
+  ];
 }

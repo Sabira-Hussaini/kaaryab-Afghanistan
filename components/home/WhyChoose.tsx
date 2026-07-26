@@ -13,7 +13,7 @@ const content = {
         icon: Search,
         title: "Easy Search",
         description:
-          "Quickly search jobs, scholarships, internships and remote opportunities.",
+          "Quickly search jobs, scholarships, internships, and remote opportunities.",
       },
       {
         icon: ShieldCheck,
@@ -64,44 +64,53 @@ export default function WhyChoose() {
   return (
     <section
       dir={language === "fa" ? "rtl" : "ltr"}
+      aria-labelledby="why-choose-heading"
       className="bg-slate-50 py-20 dark:bg-slate-900"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div
-          className={`mb-12 ${
+        <header
+          className={`mb-14 ${
             language === "fa" ? "text-right" : "text-center"
           }`}
         >
-          <h2 className="text-4xl font-bold text-slate-900 dark:text-white">
+          <h2
+            id="why-choose-heading"
+            className="text-3xl font-bold text-slate-900 sm:text-4xl dark:text-white"
+          >
             {t.title}
           </h2>
 
-          <p className="mt-4 text-slate-600 dark:text-slate-300">
+          <p className="mx-auto mt-4 max-w-2xl text-slate-600 dark:text-slate-300">
             {t.subtitle}
           </p>
-        </div>
+        </header>
 
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
           {t.features.map((feature) => {
             const Icon = feature.icon;
 
             return (
-              <div
+              <article
                 key={feature.title}
-                className={`rounded-2xl bg-white p-8 shadow-md transition hover:-translate-y-2 hover:shadow-xl dark:bg-slate-800 ${
+                className={`group rounded-2xl border border-slate-200 bg-white p-8 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl dark:border-slate-700 dark:bg-slate-800 ${
                   language === "fa" ? "text-right" : "text-left"
                 }`}
               >
-                <Icon className="mb-5 text-blue-600" size={42} />
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-900/30">
+                  <Icon
+                    className="h-7 w-7 text-blue-600 dark:text-blue-400"
+                    aria-hidden="true"
+                  />
+                </div>
 
-                <h3 className="text-2xl font-semibold text-slate-900 dark:text-white">
+                <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
                   {feature.title}
                 </h3>
 
-                <p className="mt-4 text-slate-600 dark:text-slate-300">
+                <p className="mt-4 leading-7 text-slate-600 dark:text-slate-300">
                   {feature.description}
                 </p>
-              </div>
+              </article>
             );
           })}
         </div>

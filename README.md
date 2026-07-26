@@ -1,210 +1,255 @@
-# KaarYab Afghanistan
+# KaarYab Afghanistan 🇦🇫
 
-KaarYab Afghanistan is a web-based opportunity finder platform developed to help Afghan youth discover educational and professional opportunities in one place. The platform provides access to jobs, internships, scholarships, training programs, volunteer opportunities, and remote work through a clean and user-friendly interface.
+KaarYab Afghanistan is a web-based opportunity finder platform designed to help Afghan youth discover educational and professional opportunities in one place.
 
-This project was developed as a Final Capstone Project using modern web technologies with a focus on responsive design, usability, and interactive user experience.
+The platform allows users to explore **jobs, internships, scholarships, online courses, training programs, volunteer opportunities, and remote work opportunities** through a modern, responsive, and user-friendly interface.
+
+This project was developed as a **Final Capstone Project** using modern web technologies with a focus on usability, accessibility, responsive design, and interactive user experience.
 
 
 
-## Project Objectives
+# 🎯 Project Objective
 
-The main objective of this project is to create a centralized platform where users can easily explore different types of opportunities without searching multiple websites. The application also allows users to manage opportunities through a complete CRUD system while providing useful filtering and dashboard statistics.
+The main goal of KaarYab Afghanistan is to create a centralized platform where Afghan students and job seekers can easily find valuable opportunities without searching across multiple websites.
 
----
+The application provides:
 
-## Features
+- Opportunity discovery
+- Search and filtering
+- Opportunity management
+- Saved opportunities
+- Dashboard statistics
+- Multilingual support (English and Dari)
 
-### Opportunity Management
+
+
+# ✨ Features
+
+## Opportunity Management
+
+Users can:
 
 - Browse available opportunities
-- View detailed information
-- Search opportunities by keyword
+- View opportunity details
+- Search opportunities by title or organization
 - Filter opportunities by category
-- Save favorite opportunities
+- Filter by location and opportunity type
 - Add new opportunities
 - Edit existing opportunities
 - Delete opportunities
+- Save favorite opportunities
 
-### Dashboard
 
-- Total opportunities
+## Categories
+
+The platform supports:
+
+- 💼 Jobs
+- 🎓 Internships
+- 🏆 Scholarships
+- 🌍 Remote Work
+- 📚 Training Programs
+- 🤝 Volunteer Opportunities
+- 💻 Online Courses
+
+# 📊 Dashboard
+
+The dashboard provides an overview of platform data:
+
+- Total number of opportunities
 - Number of jobs
 - Number of internships
 - Number of scholarships
-- Interactive statistics chart
+- Category statistics visualization using interactive charts
 
-### User Experience
 
-- Responsive design for desktop, tablet, and mobile
-- Dark Mode support
+
+# 🌐 User Experience Features
+
+- Fully responsive design
+- Mobile, tablet, and desktop support
+- Dark mode
 - English and Dari language switching
-- Modern user interface
+- Right-to-left (RTL) support for Dari
+- Modern UI components
 - Form validation
-- Local data persistence using LocalStorage
+- LocalStorage data persistence
+- Smooth user interactions
 
 
-## Technologies Used
+# 🛠️ Technologies Used
 
-- Next.js
+## Frontend
+
+- Next.js (App Router)
 - React
 - TypeScript
 - Tailwind CSS
+
+## Libraries
+
 - React Hook Form
-- Zod
+- Zod Validation
 - Recharts
 - Lucide React Icons
 - next-themes
 
 
 
-## Project Structure
+# 📁 Project Structure
+
+kaaryab-afghanistan/
+
+├── app/
+│   ├── opportunities/
+│   ├── dashboard/
+│   ├── add-opportunity/
+│   ├── edit/
+│   └── layout.tsx
+│
+├── components/
+│   ├── opportunity/
+│   ├── dashboard/
+│   ├── layout/
+│   └── theme/
+│
+├── context/
+│   ├── LanguageContext.tsx
+│   └── SavedContext.tsx
+│
+├── data/
+│   └── opportunities.ts
+│
+├── lib/
+│   ├── storage.ts
+│   └── validation.ts
+│
+├── types/
+│   └── opportunity.ts
+│
+└── public/
+    └── images/
 
 
-app/
-components/
-context/
-data/
-lib/
-public/
-types/
+# 📸 Screenshots
 
-## Screenshots
+## Home Page
 
-### Home Page
-
-![Home](screenshots/home.png)
+![Home Page](public/images/home.jpeg)
 
 
-### Opportunities
+## Opportunities Page
 
-![Opportunities](screenshots/opportunities.png)
-
-### Opportunity Details
-
-![Details](screenshots/details.png)
+![Opportunities](public/images/opportunity.jpeg)
 
 
-### Dashboard
+## Opportunity Details
 
-![Dashboard](screenshots/dashboard.png)
-
-
-
-### Add Opportunity
-
-![Add Opportunity](screenshots/add-opportunity.png)
-
-### Dark Mode
-
-![Dark Mode](screenshots/dark-mode.png)
+![Details](public/images/details.jpeg)
 
 
+## Dashboard
 
-### Dari Language
-
-![Dari Version](screenshots/dari-language.png)
+![Dashboard](public/images/dashboard.jpeg)
 
 
-## Installation
+## Add Opportunity
 
-Clone the repository
+![Add Opportunity](public/images/add-oppojpeg.jpeg)
+
+
+## Dark Mode
+
+![Dark Mode](public/images/dark-mode.png)
+
+
+## Dari Language Support
+
+![Dari Language](public/images/dari.jpeg)
+
+
+# 🚀 Installation
+
+Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/kaaryab-afghanistan.git
+git clone https://github.com/Sabira-Hussaini/kaaryab-Afghanistan.git
 
-
-Navigate to the project
+live demo: https://kaaryab-afghanistan-ten.vercel.app/
+Navigate to the project folder:
 
 ```bash
-cd kaaryab-afghanistan
+cd kaaryab-Afghanistan
 
 
-Install dependencies
+Install dependencies:
 
 ```bash
 npm install
 
 
-Start the development server
+Run the development server:
 
 ```bash
 npm run dev
 
 
-Open the application in your browser
-
+Open your browser:
 
 http://localhost:3000
 
 
-## Building the Project
 
-Create the production build
+
+# 🏗️ Production Build
+
+Create a production build:
 
 ```bash
 npm run build
 
 
-Run the production version
+Start the production server:
 
 ```bash
 npm start
 
 
-## Future Improvements
+# 🔮 Future Improvements
 
-Although the current version provides the main functionality of the platform, several features can be added in future versions:
+Future versions can include:
 
 - User authentication
 - Admin dashboard
 - Database integration
 - Backend API
 - Email notifications
-- Advanced search
+- Advanced search system
 - Pagination
-- Bookmark synchronization
-- AI-based opportunity recommendations
+- Cloud-based saved opportunities
+- AI-powered opportunity recommendations
 
 
-## Author
+
+# 👩‍💻 Author
 
 **Sabira Hussaini**
 
 Final Capstone Project
 
 
+# 🙏 Acknowledgements
 
-## Acknowledgements
+This project was developed as part of the Final Capstone Project using the React and Next.js ecosystem.
 
-This project was developed as part of the Final Capstone Project using the React and Next.js ecosystem. Open-source libraries such as Tailwind CSS, Recharts, React Hook Form, Zod, and Lucide React were used to improve the functionality and user experience of the application.
+Special thanks to the open-source communities behind:
 
-## Screenshots
+- Next.js
+- React
+- Tailwind CSS
+- React Hook Form
+- Zod
+- Recharts
+- Lucide React
 
-
-### Home Page
-
-![Home](public/images/home.jpeg)
-
-### Opportunities
-
-![Opportunities](public/images/opportunity.jpeg)
-
-### Opportunity Details
-
-![Opportunity Details](public/images/details.jpeg)
-
-### Dashboard
-
-![Dashboard](public/images/dashboard.jpeg)
-
-### Add Opportunity
-
-![Add Opportunity](public/images/add-oppojpeg.jpeg)
-
-### Dark Mode
-
-![Dark Mode](public/images/dark-mode.png)
-
-### Dari Language
-
-![Dari Language](public/images/dari.jpeg)
+These tools helped create a modern, scalable, and user-friendly application.
