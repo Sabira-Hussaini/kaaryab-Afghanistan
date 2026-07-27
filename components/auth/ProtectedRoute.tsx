@@ -1,52 +1,175 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
-export default function ProtectedRoute({
+type User = {
+  name: string;
+  email: string;
+};
+
+type StoredUser = User & {
+  password: string;
+};
+
+type AuthContextType = {
+  user: User | null;
+  loading: boolean;
+
+  login: (
+    email: string,
+    password: string
+  ) => boolean;
+
+  signup: (
+    name: string,
+    email: string,
+    password: string
+  ) => boolean;
+
+  logout: () => void;
+};
+
+const AuthContext =
+  createContext<AuthContextType | null>(null);
+
+export function AuthProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [user, setUser] =
+    useState<User | null>(null);
 
-  const { user, loading } = useAuth();
-
-  const router = useRouter();
-
+  const [loading, setLoading] =
+    useState(true);
 
   useEffect(() => {
+    const savedUser =
+      localStorage.getItem("currentUser");
 
-    if (!loading && !user) {
-
-      router.push("/signup");
-
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
     }
 
-  }, [user, loading, router]);
+    setLoading(false);
+  }, []);
 
+  function signup(
+    name: string,
+    email: string,
+    password: string
+  ) {
+    const users: StoredUser[] =
+      JSON.parse(
+        localStorage.getItem("users") || "[]"
+      );
 
+    const exists =
+      users.find(
+        (u) => u.email === email
+      );
 
-  if (loading) {
+    if (exists) {
+      return false;
+    }
 
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p className="text-xl font-semibold">
-          Loading...
-        </p>
-      </div>
+    const newUser: StoredUser = {
+      name,
+      email,
+      password,
+    };
+
+    users.push(newUser);
+
+    localStorage.setItem(
+      "users",
+      JSON.stringify(users)
     );
 
+    const publicUser: User = {
+      name,
+      email,
+    };
+
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(publicUser)
+    );
+
+    setUser(publicUser);
+
+    return true;
   }
 
+  function login(
+    email: string,
+    password: string
+  ) {
+    const users: StoredUser[] =
+      JSON.parse(
+        localStorage.getItem("users") || "[]"
+      );
 
+    const found =
+      users.find(
+        (u) =>
+          u.email === email &&
+          u.password === password
+      );
 
-  if (!user) {
-    return null;
+    if (!found) {
+      return false;
+    }
+
+    const publicUser: User = {
+      name: found.name,
+      email: found.email,
+    };
+
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(publicUser)
+    );
+
+    setUser(publicUser);
+
+    return true;
   }
 
+  function logout() {
+    localStorage.removeItem("currentUser");
+    setUser(null);
+  }
 
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        signup,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
 
-  return children;
+export function useAuth() {
+  const context =
+    useContext(AuthContext);
 
+  if (!context) {
+    throw new Error(
+      "useAuth must be used inside AuthProvider"
+    );
+  }
+
+  return context;
 }
