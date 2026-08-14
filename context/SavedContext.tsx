@@ -14,37 +14,43 @@ type SavedContextType = {
 };
 
 const SavedContext =
-  createContext<SavedContextType | undefined>(undefined);
+  createContext<SavedContextType | undefined>(
+    undefined
+  );
 
 const SAVED_KEY = "saved-opportunities";
+
+function getInitialSaved(): string[] {
+  if (typeof window === "undefined") {
+    return [];
+  }
+
+  try {
+    const saved =
+      localStorage.getItem(SAVED_KEY);
+
+    if (!saved) {
+      return [];
+    }
+
+    const parsed = JSON.parse(saved);
+
+    return Array.isArray(parsed)
+      ? parsed
+      : [];
+  } catch {
+    return [];
+  }
+}
 
 export function SavedProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [savedIds, setSavedIds] = useState<string[]>([]);
+  const [savedIds, setSavedIds] =
+    useState<string[]>(getInitialSaved);
 
-
-  // Load saved opportunities
-  useEffect(() => {
-    try {
-      const saved =
-        localStorage.getItem(SAVED_KEY);
-
-      if (saved) {
-        setSavedIds(JSON.parse(saved));
-      }
-    } catch (error) {
-      console.error(
-        "Failed to load saved opportunities:",
-        error
-      );
-    }
-  }, []);
-
-
-  // Save opportunities whenever state changes
   useEffect(() => {
     try {
       localStorage.setItem(
@@ -59,22 +65,21 @@ export function SavedProvider({
     }
   }, [savedIds]);
 
+  function toggleSaved(id: string): void {
+    setSavedIds((previous) => {
+      if (previous.includes(id)) {
+        return previous.filter(
+          (item) => item !== id
+        );
+      }
 
-  const toggleSaved = (id: string) => {
-    setSavedIds((previous) =>
-      previous.includes(id)
-        ? previous.filter(
-            (item) => item !== id
-          )
-        : [...previous, id]
-    );
-  };
+      return [...previous, id];
+    });
+  }
 
-
-  const isSaved = (id: string) => {
+  function isSaved(id: string): boolean {
     return savedIds.includes(id);
-  };
-
+  }
 
   return (
     <SavedContext.Provider
@@ -89,8 +94,7 @@ export function SavedProvider({
   );
 }
 
-
-export function useSaved() {
+export function useSaved(): SavedContextType {
   const context = useContext(SavedContext);
 
   if (!context) {

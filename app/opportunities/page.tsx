@@ -1,16 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import OpportunityCard from "@/components/opportunity/OpportunityCard";
 import SearchFilter from "@/components/opportunity/SearchFilter";
 import CategoryFilter from "@/components/opportunity/CategoryFilter";
 
 import { opportunities as demoData } from "@/data/opportunities";
-import { getStoredOpportunities } from "@/lib/storage";
+import { getAllOpportunities } from "@/lib/storage";
 import { Opportunity } from "@/types/opportunity";
 import { useLanguage } from "@/context/LanguageContext";
-
 
 const text = {
   en: {
@@ -34,28 +37,21 @@ const text = {
     deadline:
       "Expiring within 30 days",
 
-    all:
-      "All",
+    all: "All",
 
-    remote:
-      "Remote",
+    remote: "Remote",
 
-    onsite:
-      "On-site",
+    onsite: "On-site",
 
-    hybrid:
-      "Hybrid",
+    hybrid: "Hybrid",
 
-    clear:
-      "Clear Filters",
+    clear: "Clear Filters",
 
     loading:
       "Loading opportunities...",
   },
 
-
   fa: {
-
     title:
       "فرصت‌ها را بررسی کنید",
 
@@ -77,17 +73,13 @@ const text = {
     deadline:
       "فرصت‌های نزدیک به پایان",
 
-    all:
-      "همه",
+    all: "همه",
 
-    remote:
-      "دورکاری",
+    remote: "دورکاری",
 
-    onsite:
-      "حضوری",
+    onsite: "حضوری",
 
-    hybrid:
-      "ترکیبی",
+    hybrid: "ترکیبی",
 
     clear:
       "پاک کردن فیلترها",
@@ -97,647 +89,295 @@ const text = {
   },
 };
 
-
-
 export default function OpportunitiesPage() {
-
-  const { language } = useLanguage();
+  const { language } =
+    useLanguage();
 
   const t = text[language];
 
-
-  const [search,setSearch] =
+  const [search, setSearch] =
     useState("");
 
-  const [category,setCategory] =
+  const [category, setCategory] =
     useState("All");
 
-  const [location,setLocation] =
+  const [location, setLocation] =
     useState("");
 
-  const [type,setType] =
+  const [type, setType] =
     useState("All");
 
-  const [deadline,setDeadline] =
+  const [deadline, setDeadline] =
     useState(false);
 
-
-  const [loading,setLoading] =
+  const [loading, setLoading] =
     useState(true);
 
+  const [
+    allOpportunities,
+    setAllOpportunities,
+  ] = useState<Opportunity[]>([]);
 
-  const [allOpportunities,setAllOpportunities] =
-    useState<Opportunity[]>([]);
+  useEffect(() => {
+    const loadOpportunities = () => {
+      const all =
+        getAllOpportunities(
+          demoData
+        );
 
+      setAllOpportunities(all);
+      setLoading(false);
+    };
 
+    loadOpportunities();
 
-  useEffect(()=>{
+    window.addEventListener(
+      "storage",
+      loadOpportunities
+    );
 
+    return () => {
+      window.removeEventListener(
+        "storage",
+        loadOpportunities
+      );
+    };
+  }, []);
 
-    const stored =
-      getStoredOpportunities();
+  const filtered = useMemo(() => {
+    return allOpportunities.filter(
+      (item) => {
+        const searchText =
+          search.toLowerCase();
 
-
-
-    const merged =
-      [...demoData];
-
-
-
-    stored.forEach((item)=>{
-
-
-      if(
-        !merged.some(
-          (demo)=>
-            demo.id === item.id
-        )
-      ){
-
-        merged.push(item);
-
-      }
-
-
-    });
-
-
-
-    setAllOpportunities(merged);
-
-
-    setLoading(false);
-
-
-
-  },[]);
-
-
-
-
-
-
-  const filtered =
-    useMemo(()=>{
-
-
-      return allOpportunities.filter(
-        (item)=>{
-
-
-          const searchText =
-            search.toLowerCase();
-
-
-
-          const matchesSearch =
-
-            item.title
+        const matchesSearch =
+          item.title
             ?.toLowerCase()
-            .includes(searchText)
+            .includes(searchText) ||
 
-            ||
-
-            item.titleFa
+          item.titleFa
             ?.toLowerCase()
-            .includes(searchText)
+            .includes(searchText) ||
 
-            ||
-
-            item.organization
+          item.organization
             ?.toLowerCase()
-            .includes(searchText)
+            .includes(searchText) ||
 
-            ||
-
-            item.organizationFa
+          item.organizationFa
             ?.toLowerCase()
             .includes(searchText);
 
+        const matchesCategory =
+          category === "All" ||
+          item.category === category;
 
+        const matchesLocation =
+          location === "" ||
 
-
-
-
-          const matchesCategory =
-
-            category === "All"
-
-            ||
-
-            item.category === category;
-
-
-
-
-
-
-
-          const matchesLocation =
-
-            location === ""
-
-            ||
-
-            item.location
+          item.location
             ?.toLowerCase()
             .includes(
               location.toLowerCase()
-            )
+            ) ||
 
-            ||
-
-            item.locationFa
+          item.locationFa
             ?.toLowerCase()
             .includes(
               location.toLowerCase()
             );
 
+        const matchesType =
+          type === "All" ||
+          item.type === type;
 
+        const deadlineTime =
+          new Date(
+            item.deadline
+          ).getTime();
 
+        const now =
+          new Date().getTime();
 
+        const thirtyDays =
+          30 *
+          24 *
+          60 *
+          60 *
+          1000;
 
-
-
-          const matchesType =
-
-            type === "All"
-
-            ||
-
-            item.type === type;
-
-
-
-
-
-
-
-          const matchesDeadline =
-
-            !deadline
-
-            ||
-
-            (
-
-              new Date(item.deadline)
-              .getTime()
-
-              -
-
-              new Date()
-              .getTime()
-
-            )
-
-            <=
-
-            30 *
-            24 *
-            60 *
-            60 *
-            1000;
-
-
-
-
-
-
-
-          return (
-
-            matchesSearch &&
-
-            matchesCategory &&
-
-            matchesLocation &&
-
-            matchesType &&
-
-            matchesDeadline
-
+        const matchesDeadline =
+          !deadline ||
+          (
+            deadlineTime >= now &&
+            deadlineTime - now <=
+              thirtyDays
           );
 
-
-        }
-      );
-
-
-    },[
-      allOpportunities,
-      search,
-      category,
-      location,
-      type,
-      deadline
-    ]);
-
-
-
-
-
-
-  if(loading){
-
-    return (
-
-      <main className="
-      flex
-      min-h-[60vh]
-      items-center
-      justify-center
-      ">
-
-        <p className="
-        text-xl
-        font-semibold
-        text-slate-700
-        dark:text-white
-        ">
-
-          {t.loading}
-
-        </p>
-
-      </main>
-
+        return (
+          matchesSearch &&
+          matchesCategory &&
+          matchesLocation &&
+          matchesType &&
+          matchesDeadline
+        );
+      }
     );
+  }, [
+    allOpportunities,
+    search,
+    category,
+    location,
+    type,
+    deadline,
+  ]);
 
+  function handleDelete(id: string) {
+    setAllOpportunities(
+      (previous) =>
+        previous.filter(
+          (item) =>
+            item.id !== id
+        )
+    );
   }
 
+  function clearFilters() {
+    setSearch("");
+    setCategory("All");
+    setLocation("");
+    setType("All");
+    setDeadline(false);
+  }
 
-
-
-
-
+  if (loading) {
+    return (
+      <main className="flex min-h-[60vh] items-center justify-center">
+        <p className="text-xl font-semibold text-slate-700 dark:text-white">
+          {t.loading}
+        </p>
+      </main>
+    );
+  }
 
   return (
-
     <main
-
       dir={
         language === "fa"
-        ? "rtl"
-        : "ltr"
+          ? "rtl"
+          : "ltr"
       }
-
-      className="
-      mx-auto
-      max-w-7xl
-      px-6
-      py-16
-      "
-
+      className="mx-auto max-w-7xl px-6 py-16"
     >
-
-
-
       <div
-        className={`
-        mb-10
-        ${
-          language==="fa"
-          ? "text-right"
-          : "text-left"
-        }
-        `}
+        className={`mb-10 ${
+          language === "fa"
+            ? "text-right"
+            : "text-left"
+        }`}
       >
-
-
-        <h1 className="
-        text-4xl
-        font-bold
-        text-slate-900
-        dark:text-white
-        ">
-
+        <h1 className="text-4xl font-bold text-slate-900 dark:text-white">
           {t.title}
-
         </h1>
 
-
-
-        <p className="
-        mt-3
-        text-slate-600
-        dark:text-slate-300
-        ">
-
+        <p className="mt-3 text-slate-600 dark:text-slate-300">
           {t.description}
-
         </p>
-
-
       </div>
 
-
-
-
-
-
       <SearchFilter
-
         search={search}
-
         setSearch={setSearch}
-
       />
 
-
-
-
-
-
-
-      <div className="
-      mb-8
-      grid
-      gap-4
-      md:grid-cols-4
-      ">
-
-
-
+      <div className="mb-8 grid gap-4 md:grid-cols-4">
         <input
-
           value={location}
-
-          onChange={(e)=>
-            setLocation(e.target.value)
+          onChange={(e) =>
+            setLocation(
+              e.target.value
+            )
           }
-
           placeholder={t.location}
-
-          className="
-          rounded-xl
-          border
-          border-slate-300
-          bg-white
-          p-3
-          dark:border-slate-600
-          dark:bg-slate-800
-          dark:text-white
-          "
-
+          className="rounded-xl border border-slate-300 bg-white p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
         />
 
-
-
-
-
         <select
-
           value={type}
-
-          onChange={(e)=>
+          onChange={(e) =>
             setType(e.target.value)
           }
-
-          className="
-          rounded-xl
-          border
-          border-slate-300
-          bg-white
-          p-3
-          dark:border-slate-600
-          dark:bg-slate-800
-          dark:text-white
-          "
-
+          className="rounded-xl border border-slate-300 bg-white p-3 dark:border-slate-600 dark:bg-slate-800 dark:text-white"
         >
-
-
           <option value="All">
             {t.all}
           </option>
-
 
           <option value="Remote">
             {t.remote}
           </option>
 
-
           <option value="On-site">
             {t.onsite}
           </option>
 
-
           <option value="Hybrid">
             {t.hybrid}
           </option>
-
-
         </select>
 
-
-
-
-
-
-
-        <label className="
-        flex
-        items-center
-        gap-3
-        rounded-xl
-        border
-        p-3
-        dark:border-slate-600
-        ">
-
-
+        <label className="flex items-center gap-3 rounded-xl border p-3 dark:border-slate-600">
           <input
-
             type="checkbox"
-
             checked={deadline}
-
-            onChange={(e)=>
+            onChange={(e) =>
               setDeadline(
                 e.target.checked
               )
             }
-
           />
 
-
           {t.deadline}
-
-
         </label>
 
-
-
-
-
-
         <button
-
           type="button"
-
-          onClick={()=>{
-
-            setSearch("");
-
-            setCategory("All");
-
-            setLocation("");
-
-            setType("All");
-
-            setDeadline(false);
-
-          }}
-
-          className="
-          rounded-xl
-          bg-slate-200
-          px-4
-          py-3
-          font-medium
-          text-slate-700
-          hover:bg-slate-300
-          dark:bg-slate-700
-          dark:text-white
-          "
-
+          onClick={clearFilters}
+          className="rounded-xl bg-slate-200 px-4 py-3 font-medium text-slate-700 hover:bg-slate-300 dark:bg-slate-700 dark:text-white"
         >
-
           {t.clear}
-
         </button>
-
-
-
       </div>
 
-
-
-
-
-
       <CategoryFilter
-
         selected={category}
-
         setSelected={setCategory}
-
       />
 
+      {filtered.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-slate-300 p-16 text-center dark:border-slate-700">
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+            {t.emptyTitle}
+          </h2>
 
-
-
-
-
-
-
-      {
-        filtered.length === 0 ?
-
-
-        (
-
-          <div className="
-          rounded-2xl
-          border
-          border-dashed
-          border-slate-300
-          p-16
-          text-center
-          dark:border-slate-700
-          ">
-
-
-            <h2 className="
-            text-2xl
-            font-bold
-            text-slate-900
-            dark:text-white
-            ">
-
-              {t.emptyTitle}
-
-            </h2>
-
-
-
-            <p className="
-            mt-3
-            text-slate-500
-            dark:text-slate-400
-            ">
-
-              {t.emptyDescription}
-
-            </p>
-
-
-
-          </div>
-
-        )
-
-        :
-
-
-        (
-
-          <div className="
-          mt-10
-          grid
-          gap-8
-          md:grid-cols-2
-          xl:grid-cols-3
-          ">
-
-
-            {
-              filtered.map((item)=>(
-
-
-                <OpportunityCard
-
-                  key={item.id}
-
-                  opportunity={item}
-
-
-                  onDelete={(id)=>{
-
-
-                    setAllOpportunities(
-                      (prev)=>
-
-                      prev.filter(
-                        (item)=>
-                        item.id !== id
-                      )
-
-                    );
-
-
-                  }}
-
-                />
-
-
-              ))
-            }
-
-
-          </div>
-
-        )
-
-      }
-
-
-
-
-
+          <p className="mt-3 text-slate-500 dark:text-slate-400">
+            {t.emptyDescription}
+          </p>
+        </div>
+      ) : (
+        <div className="mt-10 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+          {filtered.map(
+            (item) => (
+              <OpportunityCard
+                key={item.id}
+                opportunity={item}
+                onDelete={
+                  handleDelete
+                }
+              />
+            )
+          )}
+        </div>
+      )}
     </main>
-
   );
-
 }

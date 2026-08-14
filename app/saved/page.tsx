@@ -1,12 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { HeartCrack } from "lucide-react";
 
 import OpportunityCard from "@/components/opportunity/OpportunityCard";
 import { useSaved } from "@/context/SavedContext";
 import { useLanguage } from "@/context/LanguageContext";
-import { opportunities } from "@/data/opportunities";
+
+import { opportunities as demoData } from "@/data/opportunities";
+import { getAllOpportunities } from "@/lib/storage";
+import { Opportunity } from "@/types/opportunity";
 
 const text = {
   en: {
@@ -29,27 +33,59 @@ const text = {
 export default function SavedPage() {
   const { savedIds } = useSaved();
   const { language } = useLanguage();
+
   const t = text[language];
 
-  const saved = opportunities.filter((item) =>
-    savedIds.includes(item.id)
+  const [allOpportunities, setAllOpportunities] =
+    useState<Opportunity[]>([]);
+
+  useEffect(() => {
+    const loadOpportunities = () => {
+      const all = getAllOpportunities(demoData);
+
+      setAllOpportunities(all);
+    };
+
+    loadOpportunities();
+
+    window.addEventListener(
+      "storage",
+      loadOpportunities
+    );
+
+    return () => {
+      window.removeEventListener(
+        "storage",
+        loadOpportunities
+      );
+    };
+  }, []);
+
+  const saved = allOpportunities.filter(
+    (item) => savedIds.includes(item.id)
   );
 
   return (
     <main
-      dir={language === "fa" ? "rtl" : "ltr"}
+      dir={
+        language === "fa"
+          ? "rtl"
+          : "ltr"
+      }
       className="mx-auto max-w-7xl px-6 py-20"
     >
       <h1
         className={`mb-12 text-5xl font-extrabold text-blue-600 dark:text-blue-400 ${
-          language === "fa" ? "text-right" : "text-left"
+          language === "fa"
+            ? "text-right"
+            : "text-left"
         }`}
       >
         {t.title}
       </h1>
 
       {saved.length === 0 ? (
-        <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-8 py-16 text-center transition dark:border-slate-700 dark:bg-slate-800">
+        <div className="rounded-3xl border border-dashed border-slate-300 bg-slate-50 px-8 py-16 text-center dark:border-slate-700 dark:bg-slate-800">
           <HeartCrack
             size={70}
             className="mx-auto mb-6 text-red-500"
@@ -65,7 +101,7 @@ export default function SavedPage() {
 
           <Link
             href="/opportunities"
-            className="mt-8 inline-block rounded-xl bg-blue-600 px-8 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-blue-700"
+            className="mt-8 inline-block rounded-xl bg-blue-600 px-8 py-3 font-semibold text-white hover:bg-blue-700"
           >
             {t.browse}
           </Link>

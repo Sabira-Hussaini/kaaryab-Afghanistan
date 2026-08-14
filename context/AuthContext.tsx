@@ -3,7 +3,6 @@
 import {
   createContext,
   useContext,
-  useEffect,
   useState,
 } from "react";
 
@@ -22,17 +21,36 @@ type AuthContextType = {
   login: (
     email: string,
     password: string
-  ) => boolean;
+  ) => Promise<boolean>;
   signup: (
     name: string,
     email: string,
     password: string
-  ) => boolean;
+  ) => Promise<boolean>;
   logout: () => void;
 };
 
 const AuthContext =
   createContext<AuthContextType | null>(null);
+
+async function hashPassword(
+  password: string
+) {
+  const encoder = new TextEncoder();
+
+  const data = encoder.encode(password);
+
+  const hash = await crypto.subtle.digest(
+    "SHA-256",
+    data
+  );
+
+  return Array.from(new Uint8Array(hash))
+    .map((b) =>
+      b.toString(16).padStart(2, "0")
+    )
+    .join("");
+}
 
 export function AuthProvider({
   children,
@@ -40,45 +58,45 @@ export function AuthProvider({
   children: React.ReactNode;
 }) {
   const [user, setUser] =
-    useState<User | null>(null);
+    useState<User | null>(() => {
+      if (typeof window === "undefined") {
+        return null;
+      }
 
-  const [loading, setLoading] =
-    useState(true);
+      const savedUser =
+        localStorage.getItem("currentUser");
 
-  useEffect(() => {
-    const savedUser =
-      localStorage.getItem("currentUser");
+      return savedUser
+        ? JSON.parse(savedUser)
+        : null;
+    });
 
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
+  const loading = false;
 
-    setLoading(false);
-  }, []);
-
-  function signup(
+  async function signup(
     name: string,
     email: string,
     password: string
   ) {
-    const users: StoredUser[] =
-      JSON.parse(
-        localStorage.getItem("users") || "[]"
-      );
+    const users: StoredUser[] = JSON.parse(
+      localStorage.getItem("users") || "[]"
+    );
 
-    const exists =
-      users.find(
-        (u) => u.email === email
-      );
+    const exists = users.find(
+      (u) => u.email === email
+    );
 
     if (exists) {
       return false;
     }
 
-    const newUser = {
+    const hashedPassword =
+      await hashPassword(password);
+
+    const newUser: StoredUser = {
       name,
       email,
-      password,
+      password: hashedPassword,
     };
 
     users.push(newUser);
@@ -88,7 +106,7 @@ export function AuthProvider({
       JSON.stringify(users)
     );
 
-    const publicUser = {
+    const publicUser: User = {
       name,
       email,
     };
@@ -103,27 +121,28 @@ export function AuthProvider({
     return true;
   }
 
-  function login(
+  async function login(
     email: string,
     password: string
   ) {
-    const users: StoredUser[] =
-      JSON.parse(
-        localStorage.getItem("users") || "[]"
-      );
+    const users: StoredUser[] = JSON.parse(
+      localStorage.getItem("users") || "[]"
+    );
 
-    const found =
-      users.find(
-        (u) =>
-          u.email === email &&
-          u.password === password
-      );
+    const hashedPassword =
+      await hashPassword(password);
+
+    const found = users.find(
+      (u) =>
+        u.email === email &&
+        u.password === hashedPassword
+    );
 
     if (!found) {
       return false;
     }
 
-    const publicUser = {
+    const publicUser: User = {
       name: found.name,
       email: found.email,
     };
@@ -137,8 +156,7 @@ export function AuthProvider({
 
     return true;
   }
-
-  function logout() {
+    function logout() {
     localStorage.removeItem(
       "currentUser"
     );

@@ -21,41 +21,39 @@ const LanguageContext =
 
 const LANGUAGE_KEY = "language";
 
-
 export function LanguageProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const [language, setLanguageState] =
-    useState<Language>("en");
-
-
-  // Load saved language
-  useEffect(() => {
-    try {
-      const saved =
-        localStorage.getItem(
-          LANGUAGE_KEY
-        );
-
-      if (
-        saved === "en" ||
-        saved === "fa"
-      ) {
-        setLanguageState(saved);
+    useState<Language>(() => {
+      if (typeof window === "undefined") {
+        return "en";
       }
-    } catch (error) {
-      console.error(
-        "Failed to load language:",
-        error
-      );
-    }
-  }, []);
 
+      try {
+        const saved =
+          localStorage.getItem(
+            LANGUAGE_KEY
+          );
 
+        if (
+          saved === "en" ||
+          saved === "fa"
+        ) {
+          return saved;
+        }
+      } catch (error) {
+        console.error(
+          "Failed to load language:",
+          error
+        );
+      }
 
-  // Change language
+      return "en";
+    });
+
   const setLanguage = (
     lang: Language
   ) => {
@@ -74,9 +72,6 @@ export function LanguageProvider({
     }
   };
 
-
-
-  // Handle RTL / LTR automatically
   useEffect(() => {
     document.documentElement.lang =
       language;
@@ -86,10 +81,7 @@ export function LanguageProvider({
         ? "rtl"
         : "ltr";
   }, [language]);
-
-
-
-  return (
+    return (
     <LanguageContext.Provider
       value={{
         language,
@@ -100,8 +92,6 @@ export function LanguageProvider({
     </LanguageContext.Provider>
   );
 }
-
-
 
 export function useLanguage() {
   const context =
