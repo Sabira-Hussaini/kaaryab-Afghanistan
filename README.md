@@ -1,46 +1,44 @@
 # KaarYab Afghanistan 🇦🇫
 
-KaarYab Afghanistan is a web-based opportunity finder platform designed to help Afghan youth discover educational and professional opportunities in one place.
+KaarYab Afghanistan is a web-based opportunity platform designed to help Afghan students and job seekers discover educational and professional opportunities in one place.
 
-The platform allows users to explore **jobs, internships, scholarships, online courses, training programs, volunteer opportunities, and remote work opportunities** through a modern, responsive, and user-friendly interface.
+The platform brings together opportunities such as **jobs, internships, scholarships, online courses, training programs, volunteer opportunities, and remote work** through a modern, responsive, and accessible interface.
 
-This project was developed as a **Final Capstone Project** using modern web technologies with a focus on usability, accessibility, responsive design, and interactive user experience.
+This project was developed as a **Final Capstone Project**, with a focus on practical functionality, responsive design, usability, and a clear user experience.
 
+## 🌐 Live Demo
 
+**[Visit KaarYab Afghanistan](https://kaaryab-afghanistan-ten.vercel.app/)**
 
-# 🎯 Project Objective
+## 🎯 Project Objective
 
-The main goal of KaarYab Afghanistan is to create a centralized platform where Afghan students and job seekers can easily find valuable opportunities without searching across multiple websites.
+Finding relevant opportunities can require searching across many different websites and platforms.
 
-The application provides:
+KaarYab aims to provide a centralized place where Afghan students and job seekers can discover and manage different types of opportunities through a simple and organized interface.
 
-- Opportunity discovery
-- Search and filtering
-- Opportunity management
-- Saved opportunities
-- Dashboard statistics
-- Multilingual support (English and Dari)
+## ✨ Features
 
-
-
-# ✨ Features
-
-## Opportunity Management
+### 🔎 Opportunity Discovery
 
 Users can:
 
 - Browse available opportunities
-- View opportunity details
-- Search opportunities by title or organization
-- Filter opportunities by category
-- Filter by location and opportunity type
+- Search by title or organization
+- Filter by category
+- Filter by location
+- Filter by opportunity type
+- View detailed opportunity information
+
+### 📝 Opportunity Management
+
+Users can:
+
 - Add new opportunities
 - Edit existing opportunities
 - Delete opportunities
 - Save favorite opportunities
 
-
-## Categories
+### 📂 Opportunity Categories
 
 The platform supports:
 
@@ -52,54 +50,80 @@ The platform supports:
 - 🤝 Volunteer Opportunities
 - 💻 Online Courses
 
-# 📊 Dashboard
+### 📊 Dashboard
 
-The dashboard provides an overview of platform data:
+The dashboard provides an overview of opportunity data, including:
 
-- Total number of opportunities
-- Number of jobs
-- Number of internships
-- Number of scholarships
-- Category statistics visualization using interactive charts
+- Total opportunities
+- Jobs
+- Internships
+- Scholarships
+- Category statistics
+- Interactive data visualization
 
+### 🌐 User Experience
 
-
-# 🌐 User Experience Features
-
-- Fully responsive design
-- Mobile, tablet, and desktop support
+- Responsive design for mobile, tablet, and desktop
 - Dark mode
-- English and Dari language switching
+- English and Dari language support
 - Right-to-left (RTL) support for Dari
-- Modern UI components
 - Form validation
 - LocalStorage data persistence
-- Smooth user interactions
+- Reusable UI components
+- Interactive user interface
 
+## 🛠️ Tech Stack
 
-# 🛠️ Technologies Used
-
-## Frontend
+### Frontend
 
 - Next.js (App Router)
 - React
 - TypeScript
 - Tailwind CSS
 
-## Libraries
+### Libraries & Tools
 
 - React Hook Form
-- Zod Validation
+- Zod
 - Recharts
-- Lucide React Icons
+- Lucide React
 - next-themes
+- Git & GitHub
 
+## 📸 Screenshots
 
+### Home Page
 
-# 📁 Project Structure
+![Home Page](public/images/home.jpeg)
 
+### Opportunities Page
+
+![Opportunities](public/images/opportunity.jpeg)
+
+### Opportunity Details
+
+![Opportunity Details](public/images/details.jpeg)
+
+### Dashboard
+
+![Dashboard](public/images/dashboard.jpeg)
+
+### Add Opportunity
+
+![Add Opportunity](public/images/add-oppojpeg.jpeg)
+
+### Dark Mode
+
+![Dark Mode](public/images/dark-mode.png)
+
+### Dari Language Support
+
+![Dari Language Support](public/images/dari.jpeg)
+
+## 📁 Project Structure
+
+```text
 kaaryab-afghanistan/
-
 ├── app/
 │   ├── opportunities/
 │   ├── dashboard/
@@ -129,127 +153,3 @@ kaaryab-afghanistan/
 │
 └── public/
     └── images/
-
-
-# 📸 Screenshots
-
-## Home Page
-
-![Home Page](public/images/home.jpeg)
-
-
-## Opportunities Page
-
-![Opportunities](public/images/opportunity.jpeg)
-
-
-## Opportunity Details
-
-![Details](public/images/details.jpeg)
-
-
-## Dashboard
-
-![Dashboard](public/images/dashboard.jpeg)
-
-
-## Add Opportunity
-
-![Add Opportunity](public/images/add-oppojpeg.jpeg)
-
-
-## Dark Mode
-
-![Dark Mode](public/images/dark-mode.png)
-
-
-## Dari Language Support
-
-![Dari Language](public/images/dari.jpeg)
-
-
-# 🚀 Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/Sabira-Hussaini/kaaryab-Afghanistan.git
-
-live demo: https://kaaryab-afghanistan-ten.vercel.app/
-Navigate to the project folder:
-
-```bash
-cd kaaryab-Afghanistan
-
-
-Install dependencies:
-
-```bash
-npm install
-
-
-Run the development server:
-
-```bash
-npm run dev
-
-
-Open your browser:
-
-http://localhost:3000
-
-
-
-
-# 🏗️ Production Build
-
-Create a production build:
-
-```bash
-npm run build
-
-
-Start the production server:
-
-```bash
-npm start
-
-
-# 🔮 Future Improvements
-
-Future versions can include:
-
-- User authentication
-- Admin dashboard
-- Database integration
-- Backend API
-- Email notifications
-- Advanced search system
-- Pagination
-- Cloud-based saved opportunities
-- AI-powered opportunity recommendations
-
-
-
-# 👩‍💻 Author
-
-**Sabira Hussaini**
-
-Final Capstone Project
-
-
-# 🙏 Acknowledgements
-
-This project was developed as part of the Final Capstone Project using the React and Next.js ecosystem.
-
-Special thanks to the open-source communities behind:
-
-- Next.js
-- React
-- Tailwind CSS
-- React Hook Form
-- Zod
-- Recharts
-- Lucide React
-
-These tools helped create a modern, scalable, and user-friendly application.
